@@ -1,0 +1,40 @@
+@"
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Salidas de build
+bin/
+obj/
+Debug/
+Release/
+
+#
+#.env
+#.env
+#.env.development.local
+#.env.test.local
+#env.production.local
+#.env.local
+#
+# Otros
+TestResult*/
+*.nupkg
+*.log
+
+#migrations
+Migrations/
+"@ | Out-File -Encoding utf8 .gitignore
+
+#env variables 
+development.env
+test.env
+production.env
