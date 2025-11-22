@@ -12,6 +12,7 @@ namespace ProyectoTecWeb.Data
         public DbSet<Doctor> doctors => Set<Doctor>();
         public DbSet<Appointment> appointments => Set<Appointment>();
 
+        public DbSet<Animal> Animals => Set<Animal>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -49,6 +50,9 @@ namespace ProyectoTecWeb.Data
                     .HasForeignKey(a => a.DoctorId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
+
+            modelBuilder.Entity<Animal>();
+
         }
     }
 }
