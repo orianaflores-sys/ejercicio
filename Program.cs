@@ -10,13 +10,14 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var port = Environment.GetEnvironmentVariable("POSTGRES_PORT");
-if (!string.IsNullOrEmpty(port))
-{
-    builder.WebHost.UseUrls($"https://0.0.0.0:{port}");
-}
+// ?? CAMBIADO: usar PORT (Railway) y http
+var appPort = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://0.0.0.0:{appPort}");
 
+// En Railway no hace falta .env, pero para local no molesta.
+// Si quieres, puedes envolverlo en un if (IsDevelopment)
 Env.Load();
+
 var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
 var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER");
 var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
@@ -55,12 +56,15 @@ builder.Services
         };
     });
 
+// ?? ESTO ESTÁ BIEN PARA LA BD (usando las envs POSTGRES_ y DATABASE_HOST)
 var dbName = Environment.GetEnvironmentVariable("POSTGRES_DB");
 var dbUser = Environment.GetEnvironmentVariable("POSTGRES_USER");
 var dbPass = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
 var dbPort = Environment.GetEnvironmentVariable("POSTGRES_PORT");
 var host = Environment.GetEnvironmentVariable("DATABASE_HOST");
-var conectionString = $"Host={host};Port={dbPort};Database={dbName};Username={dbUser};Password={dbPass}";
+
+var conectionString =
+    $"Host={host};Port={dbPort};Database={dbName};Username={dbUser};Password={dbPass}";
 
 builder.Services.AddAuthorization(options =>
 {
@@ -93,8 +97,10 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-//app.UseHttpsRedirection();
+// ?? Déjalo comentado en Railway
+// app.UseHttpsRedirection();
 
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
